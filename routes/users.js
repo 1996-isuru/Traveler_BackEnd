@@ -75,6 +75,7 @@ router.route("/login").post (async (req, res) => {
               message: "Auth successful",
               userName: user[0].userName,
               userType: user[0].type,
+              userEmail: user[0].email,
             });
           }
           return res.status(404).json({
