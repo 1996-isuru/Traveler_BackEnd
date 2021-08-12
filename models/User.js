@@ -20,6 +20,15 @@ const usersSchema = new Schema({
     type : {
         type: String,
         required: true
+    },
+    living : {
+        type: String
+    },
+    bio : {
+        type: String
+    },
+    profilePic : {
+        type: String
     }
 
 })

@@ -91,5 +91,28 @@ router.route("/login").post (async (req, res) => {
     });
 });
 
+router.route("/update").put(async (req, res) => {
+  const email = req.body.email;
+  console.log(email);
+  const living = req.body.living;
+  const bio = req.body.bio;
+  const profilePic = req.body.profilePic;
+  const user =  {
+    living,
+    bio,
+    profilePic,
+  };
+  const update = await Users.findOneAndUpdate(email, user)
+    .then(() => {
+      res.status(200).send({ status: "User Updated." });
+    })
+    .catch((err) => {
+      console.log(err);
+      res
+        .status(500)
+        .send({ status: "Error with update data.", error: err.message });
+    });
+});
+
 
 module.exports = router;
