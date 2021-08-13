@@ -91,8 +91,10 @@ router.route("/login").post (async (req, res) => {
     });
 });
 
-router.route("/update").put(async (req, res) => {
+router.route("/getstarted").put(async (req, res) => {
+  
   const email = req.body.email;
+  const filter = { email: email };
   console.log(email);
   const living = req.body.living;
   const bio = req.body.bio;
@@ -102,7 +104,8 @@ router.route("/update").put(async (req, res) => {
     bio,
     profilePic,
   };
-  const update = await Users.findOneAndUpdate(email, user)
+  console.log(user);
+  const update = await Users.findOneAndUpdate(filter, user)
     .then(() => {
       res.status(200).send({ status: "User Updated." });
     })
