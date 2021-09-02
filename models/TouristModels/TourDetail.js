@@ -6,26 +6,56 @@ const planTourDetails = new Schema({
   useremail: {
     type: String,
     required: true,
-    unique: true,
-    match:
-      /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
-  },
-  planTourName: {
-    type: String,
-    required: true,
   },
   locations: [
     {
-      locationName: {
+      planTourName: {
         type: String,
+        required: true,
       },
-      locationLatitude: {
-        type: String,
+      tourStart: {
+        tourStartLatitude: {
+          type: String,
+          required: true,
+        },
+        tourStartLongitude: {
+          type: String,
+          required: true,
+        },
+        tourStartLocationName: {
+          type: String,
+          required: true,
+        },
       },
-      locationLongitude: {
-        type: String,
+      tourEnd: {
+        tourEndLatitude: {
+          type: String,
+          required: true,
+        },
+        tourEndLongitude: {
+          type: String,
+          required: true,
+        },
+        tourEndLocationName: {
+          type: String,
+          required: true,
+        },
+      },
+      selectLocation: {
+        tourselectLatitude: {
+          type: String,
+          required: true,
+        },
+        tourselectLongitude: {
+          type: String,
+          required: true,
+        },
+        tourselectLocationName: {
+          type: String,
+          required: true,
+        },
       }
-    }
+    },
   ],
 });
 
