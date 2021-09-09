@@ -1,30 +1,39 @@
 const tourplanrouter = require("express").Router();
 let PlanTourDetails = require("../../../models/TouristModels/TourDetail");
 
-tourplanrouter.route("/plantourdetails").post((req, res) => {
-  let planTourName = req.body.tours[0].tourName;
+tourplanrouter.route("/checktour").post((req, res) => {
   let useremail = req.body.userEmail;
-  let tourStartLocationName =
-    req.body.tours[0].tourStart.tourStartLocationName;
-  let tourStartLatitude = req.body.tours[0].tourStart.tourStartLatitude;
-  let tourStartLongitude = req.body.tours[0].tourStart.tourStartLongitude;
-  let tourEndLatitude = req.body.tours[0].tourEnd.tourEndLatitude;
-  let tourEndLongitude = req.body.tours[0].tourEnd.tourEndLongitude;
-  let tourEndLocationName = req.body.tours[0].tourEnd.tourEndLocationName;
-  let tourselectLatitude =
-    req.body.tours[0].selectLocation[0].tourselectLatitude;
-  let tourselectLongitude =
-    req.body.tours[0].selectLocation[0].tourselectLongitude;
-  let tourselectLocationName =
-    req.body.tours[0].selectLocation[0].tourselectLocationName;
+  PlanTourDetails.find({ useremail: req.body.userEmail })
+    .exec()
+    .then((user) => {
+      if (user.length >= 1) {
+        return res.status(409).json({
+          message: "Already Created",
+        });
+      } else {
+        return res.status(409).json({
+          message: "Already not Created",
+        });
+      }
+    });
+});
 
-  let groupMembers = req.body.tours[0].groupMembers[0];
+tourplanrouter.route("/plantourdetails").post((req, res) => {
+  let planTourName = req.body.tourName;
+  console.log(planTourName);
+  let useremail = req.body.userEmail;
+  let tourStartLocationName = req.body.startLocationName;
+  let tourStartLatitude = req.body.startLocationLatitude;
+  let tourStartLongitude = req.body.startLocationLongitude;
+  let tourEndLatitude = req.body.endLocationName;
+  let tourEndLongitude = req.body.endLocationLatitude;
+  let tourEndLocationName = req.body.endLocationLongitude;
+
   let newPlanTourDetails = new PlanTourDetails({
     useremail,
     tours: [
       {
         planTourName,
-        groupMembers: [groupMembers],
         tourStart: {
           tourStartLatitude,
           tourStartLongitude,
@@ -35,24 +44,75 @@ tourplanrouter.route("/plantourdetails").post((req, res) => {
           tourEndLongitude,
           tourEndLocationName,
         },
-        selectLocation: [
-          {
-            tourselectLatitude,
-            tourselectLongitude,
-            tourselectLocationName,
-          },
-        ],
       },
     ],
   });
-  newPlanTourDetails
-    .save()
-    .then(() => {
-      res.json("TOur plan added");
-    })
-    .catch((err) => {
-      console.log(err.message);
-      res.status(500).send({ status: "Error with update data." });
+  PlanTourDetails.find({ useremail: req.body.userEmail })
+    .exec()
+    .then((user) => {
+      if (user.length >= 1) {
+      } else {
+        newPlanTourDetails
+          .save()
+          .then(() => {
+            res.json("Tour plan added");
+          })
+          .catch((err) => {
+            console.log(err.message);
+            res.status(500).send({ status: "Error with update data." });
+          });
+      }
+    });
+});
+
+tourplanrouter.route("/addtour").post((req, res) => {
+  console.log("addtour router");
+  let planTourName = req.body.tourName;
+  console.log(planTourName);
+  let useremail = req.body.userEmail;
+  let tourStartLocationName = req.body.startLocationName;
+  let tourStartLatitude = req.body.startLocationLatitude;
+  let tourStartLongitude = req.body.startLocationLongitude;
+  let tourEndLatitude = req.body.endLocationName;
+  let tourEndLongitude = req.body.endLocationLatitude;
+  let tourEndLocationName = req.body.endLocationLongitude;
+
+  PlanTourDetails.find({ "tours.planTourName": planTourName })
+    .exec()
+    .then((user) => {
+      if (user.length >= 1) {
+        return res.status(409).json({
+          message: "Tour Name exists",
+        });
+      } else {
+        PlanTourDetails.findOneAndUpdate(
+          { useremail: req.body.userEmail },
+          {
+            $push: {
+              tours: {
+                planTourName,
+                tourStart: {
+                  tourStartLatitude,
+                  tourStartLongitude,
+                  tourStartLocationName,
+                },
+                tourEnd: {
+                  tourEndLatitude,
+                  tourEndLongitude,
+                  tourEndLocationName,
+                },
+              },
+            },
+          }
+        )
+          .exec()
+          .then((result) => {
+            console.log(result);
+            res.status(201).json({
+              message: "Tour created",
+            });
+          });
+      }
     });
 });
 
