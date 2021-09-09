@@ -24,7 +24,7 @@ const usersSchema = new Schema({
   },
   living: {
     type: String,
-  },
+  }, 
   bio: {
     type: String,
   },

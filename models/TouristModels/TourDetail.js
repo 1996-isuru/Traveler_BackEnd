@@ -11,49 +11,41 @@ const planTourDetails = new Schema({
     {
       planTourName: {
         type: String,
+        required: true,
       },
       groupMembers: [String],
       tourStart: {
         tourStartLatitude: {
           type: String,
-          required: true,
         },
         tourStartLongitude: {
           type: String,
-          required: true,
         },
         tourStartLocationName: {
           type: String,
-          required: true,
         },
       },
       tourEnd: {
         tourEndLatitude: {
           type: String,
-          required: true,
         },
         tourEndLongitude: {
           type: String,
-          required: true,
         },
         tourEndLocationName: {
           type: String,
-          required: true,
         },
       },
       selectLocation: [
         {
           tourselectLatitude: {
             type: String,
-            required: true,
           },
           tourselectLongitude: {
             type: String,
-            required: true,
           },
           tourselectLocationName: {
             type: String,
-            required: true,
           },
         },
       ],

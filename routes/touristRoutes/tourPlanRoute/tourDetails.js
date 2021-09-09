@@ -1,26 +1,25 @@
 const tourplanrouter = require("express").Router();
 let PlanTourDetails = require("../../../models/TouristModels/TourDetail");
-// const checkAuth = require("../../../middleware/check_auth");
 
 tourplanrouter.route("/plantourdetails").post((req, res) => {
-  const planTourName = req.body.tours[0].planTourName;
-  const useremail = req.body.useremail;
-  const tourStartLocationName =
+  let planTourName = req.body.tours[0].tourName;
+  let useremail = req.body.userEmail;
+  let tourStartLocationName =
     req.body.tours[0].tourStart.tourStartLocationName;
-  const tourStartLatitude = req.body.tours[0].tourStart.tourStartLatitude;
-  const tourStartLongitude = req.body.tours[0].tourStart.tourStartLongitude;
-  const tourEndLatitude = req.body.tours[0].tourEnd.tourEndLatitude;
-  const tourEndLongitude = req.body.tours[0].tourEnd.tourEndLongitude;
-  const tourEndLocationName = req.body.tours[0].tourEnd.tourEndLocationName;
-  const tourselectLatitude =
+  let tourStartLatitude = req.body.tours[0].tourStart.tourStartLatitude;
+  let tourStartLongitude = req.body.tours[0].tourStart.tourStartLongitude;
+  let tourEndLatitude = req.body.tours[0].tourEnd.tourEndLatitude;
+  let tourEndLongitude = req.body.tours[0].tourEnd.tourEndLongitude;
+  let tourEndLocationName = req.body.tours[0].tourEnd.tourEndLocationName;
+  let tourselectLatitude =
     req.body.tours[0].selectLocation[0].tourselectLatitude;
-  const tourselectLongitude =
+  let tourselectLongitude =
     req.body.tours[0].selectLocation[0].tourselectLongitude;
-  const tourselectLocationName =
+  let tourselectLocationName =
     req.body.tours[0].selectLocation[0].tourselectLocationName;
 
-  const groupMembers = req.body.tours[0].groupMembers[0];
-  const newPlanTourDetails = new PlanTourDetails({
+  let groupMembers = req.body.tours[0].groupMembers[0];
+  let newPlanTourDetails = new PlanTourDetails({
     useremail,
     tours: [
       {
