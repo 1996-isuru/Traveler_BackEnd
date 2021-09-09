@@ -33,10 +33,11 @@ app.use("/user", usersRouter);
 const tourPlanRoutes = require("./routes/touristRoutes/tourPlanRoute/tourDetails.js");
 app.use("/tourplan",tourPlanRoutes);
 
-const paymentStripeRoute = require("./routes/Payments/Stripe.js");
-app.use("/payment", paymentStripeRoute);
-
 //then we run this port
 app.listen(PORT, () => {
   console.log(`Server is up and running on port number: ${PORT}`);
 });
+
+////////////////////
+//https://www.section.io/engineering-education/creating-a-real-time-chat-app-with-react-socket-io-with-e2e-encryption/
+
