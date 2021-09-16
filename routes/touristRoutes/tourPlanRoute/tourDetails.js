@@ -7,6 +7,7 @@ tourplanrouter.route("/checktour").post((req, res) => {
     .exec()
     .then((user) => {
       if (user.length >= 1) {
+        console.log(user);
         return res.status(409).json({
           message: "Already Created",
         });
@@ -84,7 +85,7 @@ tourplanrouter.route("/addtour").post((req, res) => {
   PlanTourDetails.find(projection, query)
     .exec()
     .then((user) => {
-      console.log("kkkkkk");
+      console.log(user);
       if (user.length >= 1) {
         return res.status(409).json({
           message: "Tour Name exists",
@@ -163,6 +164,35 @@ tourplanrouter.route("/addnewlocation").post((req, res) => {
       res.status(201).json({
         message: "Location added",
       });
+    });
+});
+
+//get trip list
+tourplanrouter.route("/showtourlist").post((req, res) => {
+  console.log("showtourlist router");
+  let useremail = req.body.userEmail;
+  console.log(useremail);
+
+  const query = {};
+  const projection = { useremail: useremail };
+
+  PlanTourDetails.find(projection)
+    .exec()
+    .then((result) => {
+      console.log("kkkkkk");
+      if (result.length >= 1) {
+        result.forEach((result) => {
+          console.log(result);
+          return res.status(409).json({
+            message: result,
+          });
+        });
+      } else {
+        console.log("sssss");
+        return res.status(409).json({
+          message: "No created tours",
+        });
+      }
     });
 });
 
