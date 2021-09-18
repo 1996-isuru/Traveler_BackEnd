@@ -25,8 +25,6 @@ connection.once("open", () => {
   console.log("Mongodb connetction succesfull");
 });
 
-
-
 const usersRouter = require("./routes/users.js");
 app.use("/user", usersRouter);
 

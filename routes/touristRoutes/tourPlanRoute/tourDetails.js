@@ -7,7 +7,7 @@ tourplanrouter.route("/checktour").post((req, res) => {
     .exec()
     .then((user) => {
       if (user.length >= 1) {
-        console.log(user);
+        // console.log(user);
         return res.status(409).json({
           message: "Already Created",
         });
@@ -68,9 +68,9 @@ tourplanrouter.route("/plantourdetails").post((req, res) => {
 });
 
 tourplanrouter.route("/addtour").post((req, res) => {
-  console.log("addtour router");
+  // console.log("addtour router");
   let planTourName = req.body.tourName;
-  console.log(planTourName);
+  // console.log(planTourName);
   let useremail = req.body.userEmail;
   let tourStartLocationName = req.body.startLocationName;
   let tourStartLatitude = req.body.startLocationLatitude;
@@ -85,13 +85,13 @@ tourplanrouter.route("/addtour").post((req, res) => {
   PlanTourDetails.find(projection, query)
     .exec()
     .then((user) => {
-      console.log(user);
+      // console.log(user);
       if (user.length >= 1) {
         return res.status(409).json({
           message: "Tour Name exists",
         });
       } else {
-        console.log("aaaaaaaaa");
+        // console.log("aaaaaaaaa");
         PlanTourDetails.findOneAndUpdate(
           { useremail: req.body.userEmail },
           {
@@ -115,9 +115,9 @@ tourplanrouter.route("/addtour").post((req, res) => {
         )
           .exec()
           .then((result) => {
-            console.log(result.tours.length);
-            console.log(result);
-            console.log(result.tours[result.tours.length - 1]._id);
+            // console.log(result.tours.length);
+            // console.log(result);
+            // console.log(result.tours[result.tours.length - 1]._id);
             let tourprofileid = result._id;
             res.status(201).json({
               message: "Tour created",
@@ -131,14 +131,14 @@ tourplanrouter.route("/addtour").post((req, res) => {
 
 // add new location
 tourplanrouter.route("/addnewlocation").post((req, res) => {
-  console.log("add place");
+  // console.log("add place");
   let tourId = req.body.tourId;
   let tourprofileid = req.body.tourprofileid;
   let planTourName = req.body.tourName;
-  // console.log(planTourName);
-  console.log(tourprofileid);
+  console.log(planTourName);
+  // console.log(tourprofileid);
   let useremail = req.body.userEmail;
-  console.log(tourId);
+  // console.log(tourId);
   let tourselectLocationName = req.body.selectLocationName;
   let tourselectLatitude = req.body.selectLocationLatitude;
   let tourselectLongitude = req.body.selectLocationLongitude;
@@ -161,6 +161,7 @@ tourplanrouter.route("/addnewlocation").post((req, res) => {
   )
     .exec()
     .then((result) => {
+      console.log(result);
       res.status(201).json({
         message: "Location added",
       });
@@ -169,9 +170,9 @@ tourplanrouter.route("/addnewlocation").post((req, res) => {
 
 //get trip list
 tourplanrouter.route("/showtourlist").post((req, res) => {
-  console.log("showtourlist router");
+  // console.log("showtourlist router");
   let useremail = req.body.userEmail;
-  console.log(useremail);
+  // console.log(useremail);
 
   const query = {};
   const projection = { useremail: useremail };
@@ -179,21 +180,45 @@ tourplanrouter.route("/showtourlist").post((req, res) => {
   PlanTourDetails.find(projection)
     .exec()
     .then((result) => {
-      console.log("kkkkkk");
+      // console.log("kkkkkk");
       if (result.length >= 1) {
         result.forEach((result) => {
-          console.log(result);
+          // console.log(result);
           return res.status(409).json({
             message: result,
           });
         });
       } else {
-        console.log("sssss");
+        // console.log("sssss");
         return res.status(409).json({
           message: "No created tours",
         });
       }
     });
+});
+
+// get location details for render map view
+tourplanrouter.route("/rendermap").get((req, res) => {
+  let tourId = req.body.tourId;
+  let tourprofileid = req.body.tourprofileid;
+
+  PlanTourDetails.findById(
+    { _id: tourprofileid, "tours._id": tourId },
+    function (err, result) {
+      if (err) {
+        res.send(err);
+      } else {
+        let resultt = result.tours.filter((obj) => {
+          return obj._id == tourId;
+        });
+        return res.status(409).json({
+          tourStart: resultt[0].tourStart,
+          tourEnd: resultt[0].tourEnd,
+          selectLocation: resultt[0].selectLocation,
+        });
+      }
+    }
+  );
 });
 
 module.exports = tourplanrouter;
