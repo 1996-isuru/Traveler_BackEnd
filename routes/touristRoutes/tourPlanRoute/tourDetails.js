@@ -26,9 +26,9 @@ tourplanrouter.route("/plantourdetails").post((req, res) => {
   let tourStartLocationName = req.body.startLocationName;
   let tourStartLatitude = req.body.startLocationLatitude;
   let tourStartLongitude = req.body.startLocationLongitude;
-  let tourEndLatitude = req.body.endLocationName;
-  let tourEndLongitude = req.body.endLocationLatitude;
-  let tourEndLocationName = req.body.endLocationLongitude;
+  let tourEndLatitude = req.body.endLocationLatitude;
+  let tourEndLongitude = req.body.endLocationLongitude;
+  let tourEndLocationName = req.body.endLocationName;
 
   let newPlanTourDetails = new PlanTourDetails({
     useremail,
@@ -36,14 +36,14 @@ tourplanrouter.route("/plantourdetails").post((req, res) => {
       {
         planTourName,
         tourStart: {
-          tourStartLatitude,
-          tourStartLongitude,
-          tourStartLocationName,
+          latitude: tourStartLatitude,
+          longitude: tourStartLongitude,
+          tourStartLocationName: tourStartLocationName,
         },
         tourEnd: {
-          tourEndLatitude,
-          tourEndLongitude,
-          tourEndLocationName,
+          latitude: tourEndLatitude,
+          longitude: tourEndLongitude,
+          tourEndLocationName: tourEndLocationName,
         },
       },
     ],
@@ -99,14 +99,14 @@ tourplanrouter.route("/addtour").post((req, res) => {
               tours: {
                 planTourName,
                 tourStart: {
-                  tourStartLatitude,
-                  tourStartLongitude,
-                  tourStartLocationName,
+                  latitude: tourStartLatitude,
+                  longitude: tourStartLongitude,
+                  tourStartLocationName: tourStartLocationName,
                 },
                 tourEnd: {
-                  tourEndLatitude,
-                  tourEndLongitude,
-                  tourEndLocationName,
+                  latitude: tourEndLatitude,
+                  longitude: tourEndLongitude,
+                  tourEndLocationName: tourEndLocationName,
                 },
               },
             },
@@ -151,8 +151,8 @@ tourplanrouter.route("/addnewlocation").post((req, res) => {
     {
       $push: {
         "tours.$.selectLocation": {
-          tourselectLatitude: tourselectLatitude,
-          tourselectLongitude: tourselectLongitude,
+          latitude: tourselectLatitude,
+          longitude: tourselectLongitude,
           tourselectLocationName: tourselectLocationName,
         },
       },
@@ -170,7 +170,7 @@ tourplanrouter.route("/addnewlocation").post((req, res) => {
 
 //get trip list
 tourplanrouter.route("/showtourlist").post((req, res) => {
-  // console.log("showtourlist router");
+  console.log("showtourlist router");
   let useremail = req.body.userEmail;
   // console.log(useremail);
 
@@ -213,10 +213,36 @@ tourplanrouter.route("/rendermap").post((req, res) => {
         let resultt = result.tours.filter((obj) => {
           return obj._id == tourId;
         });
+        console.log(resultt[0].selectLocation);
         return res.status(409).json({
           message: "get_map_details",
           tourStart: resultt[0].tourStart,
           tourEnd: resultt[0].tourEnd,
+          selectLocation: resultt[0].selectLocation,
+        });
+      }
+    }
+  );
+});
+
+// get location list for createplanmainpage
+tourplanrouter.route("/locationlist").post((req, res) => {
+  console.log("get location list for createplanmainpage");
+  let tourId = req.body.object_id;
+  let tourprofileid = req.body.tourprofileid;
+
+  PlanTourDetails.findById(
+    { _id: tourprofileid, "tours._id": tourId },
+    function (err, result) {
+      if (err) {
+        res.send(err);
+      } else {
+        let resultt = result.tours.filter((obj) => {
+          return obj._id == tourId;
+        });
+        console.log(resultt[0].selectLocation);
+        return res.status(409).json({
+          message: "get_location_details",
           selectLocation: resultt[0].selectLocation,
         });
       }

@@ -15,22 +15,22 @@ const planTourDetails = new Schema({
       },
       groupMembers: [String],
       tourStart: {
-        tourStartLatitude: {
-          type: String,
+        latitude: {
+          type: Number,
         },
-        tourStartLongitude: {
-          type: String,
+        longitude: {
+          type: Number,
         },
         tourStartLocationName: {
           type: String,
         },
       },
       tourEnd: {
-        tourEndLatitude: {
-          type: String,
+        latitude: {
+          type: Number,
         },
-        tourEndLongitude: {
-          type: String,
+        longitude: {
+          type: Number,
         },
         tourEndLocationName: {
           type: String,
@@ -38,11 +38,11 @@ const planTourDetails = new Schema({
       },
       selectLocation: [
         {
-          tourselectLatitude: {
-            type: String,
+          latitude: {
+            type: Number,
           },
-          tourselectLongitude: {
-            type: String,
+          longitude: {
+            type: Number,
           },
           tourselectLocationName: {
             type: String,
