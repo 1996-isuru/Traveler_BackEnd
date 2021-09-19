@@ -198,7 +198,8 @@ tourplanrouter.route("/showtourlist").post((req, res) => {
 });
 
 // get location details for render map view
-tourplanrouter.route("/rendermap").get((req, res) => {
+tourplanrouter.route("/rendermap").post((req, res) => {
+  console.log("get location details for render map view");
   let tourId = req.body.tourId;
   let tourprofileid = req.body.tourprofileid;
 
@@ -208,10 +209,12 @@ tourplanrouter.route("/rendermap").get((req, res) => {
       if (err) {
         res.send(err);
       } else {
+        console.log(result);
         let resultt = result.tours.filter((obj) => {
           return obj._id == tourId;
         });
         return res.status(409).json({
+          message: "get_map_details",
           tourStart: resultt[0].tourStart,
           tourEnd: resultt[0].tourEnd,
           selectLocation: resultt[0].selectLocation,
