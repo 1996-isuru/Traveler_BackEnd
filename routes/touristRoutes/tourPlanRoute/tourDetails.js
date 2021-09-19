@@ -68,7 +68,8 @@ tourplanrouter.route("/plantourdetails").post((req, res) => {
 });
 
 tourplanrouter.route("/addtour").post((req, res) => {
-  // console.log("addtour router");
+  console.log("addtour router");
+  console.log(req.body);
   let planTourName = req.body.tourName;
   // console.log(planTourName);
   let useremail = req.body.userEmail;
@@ -116,7 +117,7 @@ tourplanrouter.route("/addtour").post((req, res) => {
           .exec()
           .then((result) => {
             // console.log(result.tours.length);
-            // console.log(result);
+            console.log(result);
             // console.log(result.tours[result.tours.length - 1]._id);
             let tourprofileid = result._id;
             res.status(201).json({
@@ -244,6 +245,34 @@ tourplanrouter.route("/locationlist").post((req, res) => {
         return res.status(409).json({
           message: "get_location_details",
           selectLocation: resultt[0].selectLocation,
+        });
+      }
+    }
+  );
+});
+
+// remove_location_details
+tourplanrouter.route("/removelocation").post((req, res) => {
+  console.log("remove_location_details");
+  let tourId = req.body.tourId;
+  let tourprofileid = req.body.tourprofileid;
+  let removeLocationId = req.body.removeLocationId;
+
+  PlanTourDetails.updateOne(
+    {
+      _id: tourprofileid,
+      "tours._id": tourId,
+    },
+    {
+      $pull: { "tours.$.selectLocation": { _id: removeLocationId } },
+    },
+    function (err, result) {
+      if (err) {
+        res.send(err);
+      } else {
+        console.log(result);
+        return res.status(409).json({
+          message: "remove_location_details",
         });
       }
     }
