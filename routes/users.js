@@ -118,4 +118,18 @@ router.route("/getstarted").put(async (req, res) => {
     });
 });
 
+//get use email list
+router.route("/showemaillist").get((req, res) => {
+  console.log("get use email list");
+
+  Users.find()
+    .exec()
+    .then((result) => {
+      // console.log(result);
+      return res.status(409).json({
+        message: result,
+      });
+    });
+});
+
 module.exports = router;
