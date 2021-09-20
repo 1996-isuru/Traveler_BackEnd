@@ -27,10 +27,8 @@ const planTourDetails = new Schema({
       },
       tourEnd: {
         latitude: {
-          type: Number,
         },
         longitude: {
-          type: Number,
         },
         tourEndLocationName: {
           type: String,
@@ -39,10 +37,8 @@ const planTourDetails = new Schema({
       selectLocation: [
         {
           latitude: {
-            type: Number,
           },
           longitude: {
-            type: Number,
           },
           tourselectLocationName: {
             type: String,

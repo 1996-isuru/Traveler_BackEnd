@@ -68,18 +68,17 @@ tourplanrouter.route("/plantourdetails").post((req, res) => {
 });
 
 tourplanrouter.route("/addtour").post((req, res) => {
-  console.log("addtour router");
-  console.log(req.body);
+  // console.log("addtour routerrrrrrrr");
+  // console.log(req.body);
   let planTourName = req.body.tourName;
   // console.log(planTourName);
   let useremail = req.body.userEmail;
   let tourStartLocationName = req.body.startLocationName;
-  let tourStartLatitude = req.body.startLocationLatitude;
-  let tourStartLongitude = req.body.startLocationLongitude;
+  let tourStartLatitude = Number(req.body.startLocationLatitude);
+  let tourStartLongitude = Number(req.body.startLocationLongitude);
   let tourEndLatitude = req.body.endLocationName;
-  let tourEndLongitude = req.body.endLocationLatitude;
-  let tourEndLocationName = req.body.endLocationLongitude;
-
+  let tourEndLongitude = Number(req.body.endLocationLatitude);
+  let tourEndLocationName = Number(req.body.endLocationLongitude);
   const query = { useremail: useremail };
   const projection = { "tours.planTourName": planTourName };
 
@@ -92,13 +91,13 @@ tourplanrouter.route("/addtour").post((req, res) => {
           message: "Tour Name exists",
         });
       } else {
-        // console.log("aaaaaaaaa");
+        console.log("aaaaaaaaa");
         PlanTourDetails.findOneAndUpdate(
-          { useremail: req.body.userEmail },
+          { useremail: useremail },
           {
             $push: {
               tours: {
-                planTourName,
+                planTourName: planTourName,
                 tourStart: {
                   latitude: tourStartLatitude,
                   longitude: tourStartLongitude,
@@ -117,6 +116,7 @@ tourplanrouter.route("/addtour").post((req, res) => {
           .exec()
           .then((result) => {
             // console.log(result.tours.length);
+            console.log("result");
             console.log(result);
             // console.log(result.tours[result.tours.length - 1]._id);
             let tourprofileid = result._id;
@@ -277,6 +277,60 @@ tourplanrouter.route("/removelocation").post((req, res) => {
       }
     }
   );
+});
+
+//change start location
+tourplanrouter.route("/changestart").post((req, res) => {
+  console.log("change start location");
+  let tourId = req.body.tourId;
+  let tourprofileid = req.body.tourprofileid;
+  let tourStartLocationName = req.body.selectLocationName;
+  let tourStartLatitude = req.body.selectLocationLatitude;
+  let tourStartLongitude = req.body.selectLocationLongitude;
+  // var newvalues = {
+  //   // $set: {
+  //   //   // planTourName: "qqqqqqqqqqqqq",
+  //   //   "tourStart.latitude": tourStartLatitude,
+  //   //   "tourStart.longitude": tourStartLongitude,
+  //   //   "tourStart.tourStartLocationName": tourStartLocationName,
+  //   // },
+  //   $addToSet : {"tours" : {'tourStart.latitude.' : "333"  }}
+
+  // };
+  // const query = { _id: '6147648398333b525cbb2627', "tours._id": '6147648398333b525cbb2628' };
+
+  // PlanTourDetails.updateOne(query, newvalues)
+  //   .exec()
+  //   .then((result) => {
+  //     console.log(result);
+  //     return res.status(409).json({
+  //       message: "remove_location_details",
+  //     });
+  //   });
+
+  PlanTourDetails.update(
+    {
+      _id: tourprofileid,
+      "tours._id": tourId,
+    },
+    {
+      $set: {
+        "tourStart": {
+          "tourStart.latitude": tourStartLatitude,
+          "tourStart.longitude": tourStartLongitude,
+          "tourStart.tourStartLocationName": tourStartLocationName,
+        },
+      },
+    },
+    { new: true }
+  )
+    .exec()
+    .then((result) => {
+      console.log(result);
+      res.status(201).json({
+        message: "Location added",
+      });
+    });
 });
 
 module.exports = tourplanrouter;
