@@ -32,6 +32,10 @@ const tourPlanRoutes = require("./routes/touristRoutes/tourPlanRoute/tourDetails
 app.use("/tourplan",tourPlanRoutes);
 
 //then we run this port
+const hotelPackageRouter = require("./routes/hotelPackages.js");
+app.use("/hotelPackage", hotelPackageRouter);
+
+//then we run this port     
 app.listen(PORT, () => {
   console.log(`Server is up and running on port number: ${PORT}`);
 });
