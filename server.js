@@ -28,6 +28,9 @@ connection.once("open", () => {
 const usersRouter = require("./routes/users.js");
 app.use("/user",usersRouter);
 
+const hotelPackageRouter = require("./routes/hotelPackages.js");
+app.use("/hotelPackage", hotelPackageRouter);
+
 //then we run this port     
 app.listen(PORT, () => {
     console.log(`Server is up and running on port number: ${PORT}`)
