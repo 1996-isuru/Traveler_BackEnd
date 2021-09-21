@@ -21,7 +21,7 @@
     "multer": "^1.4.3",
     "nodemon": "^2.0.8",
     "socket.io": "^4.2.0",
-    "stripe": "^8.174.0",
+    "stripe": "^8.176.0",
     "uuid": "^8.3.2"
   },
   "optionalDependencies": {
